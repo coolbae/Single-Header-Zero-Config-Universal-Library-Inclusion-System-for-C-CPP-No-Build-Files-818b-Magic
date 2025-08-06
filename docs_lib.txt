@@ -1,0 +1,98 @@
+┌───────────────────────────────────────────────────────────────┐
+│                    lib_sup.h - 478b MAGIC!                                │
+├───────────────────────────────────────────────────────────────┤
+│  HEADER-ONLY LIBRARY INCLUSION FOR C/C++ - ZERO CONFIG!                   │
+│  • No .a/.so files • No build systems • Pure genius                       │
+└───────────────────────────────────────────────────────────────┘
+
+[1] CONTEXT CREATION:
+   • C++: Creates inline context (ODR-safe)
+        > _ls_inline = inline
+        > _ls_auto_type = auto
+   • C: Creates static context (unique per TU)
+        > _ls_inline = static
+        > _ls_auto_type = __typeof__
+
+[2] COMPILER HACKS:
+   • #pragma GCC system_header - Treat as system header
+   • Disables unused warnings (-Wunused-*)
+   • _ls_dummy variable forces proper context
+
+[3] MSVC SPECIAL:
+   • CRT initialization section (.CRT$XCU)
+   • decltype(auto) for type deduction
+   • Automatic constructor via _ls_init
+
+[4] LIBRARY INCLUSION:
+   • __LIB_SUB_INCLUDE__(p) - Your custom impl
+   • Automatically applies fixes to all globals
+
+╔═══════════════════════════════════════════════════════════════╗
+║                      BASIC USAGE:                                         ║
+╚═══════════════════════════════════════════════════════════════╝
+
++------------------+    +---------------------+    +-------------+
+| Your project     |    | lib_sup.h           |    | SDL2/       |
+| #include "..."   | -> | lib_sub_include(    | -> |   *.h       |
+| main() { ... }   |    |   "~/dev/SDL2/"     |    |   *.c       |
++------------------+    +---------------------+    +-------------+
+
+╔═══════════════════════════════════════════════════════════════╗
+║                      CODE EXAMPLE:                                        ║
+╚═══════════════════════════════════════════════════════════════╝
+
+// main.c
+#include "lib_sup.h"
+
+// MAGIC HAPPENS HERE:
+lib_sub_include("/path/to/SDL/")
+
+int main() {
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Window* win = SDL_CreateWindow(...);
+    // Enjoy full SDL without .a files!
+}
+
+╔═══════════════════════════════════════════════════════════════╗
+║               COMPILATION (GCC/Clang):                                    ║
+╚═══════════════════════════════════════════════════════════════╝
+
+gcc -I/path/to/SDL -o game main.c
+# No -lSDL2 needed!
+
+╔═══════════════════════════════════════════════════════════════╗
+║               COMPILATION (MSVC):                                         ║
+╚═══════════════════════════════════════════════════════════════╝
+
+cl /I/path/to/SDL /Fe:game.exe main.c
+# No additional libs!
+
+╔═══════════════════════════════════════════════════════════════╗
+║                     LIMITATIONS:                                          ║
+╚═══════════════════════════════════════════════════════════════╝
+
+• Requires C99 or C++17
+• Initial compilation may be slower
+• Complex macros might need adjustment
+• Your __LIB_SUB_INCLUDE__ must handle recursive includes
+
+╔═══════════════════════════════════════════════════════════════╗
+║                     GENIUS STATS:                                         ║
+╚═══════════════════════════════════════════════════════════════╝
+
++----------------+-----------------------+
+| Feature        | Value                 |
++----------------+-----------------------+
+| Size           | 818 bytes (0.81 KB)   |
+| Platforms      | Windows/Linux/macOS   |
+| Compilers      | GCC, Clang, MSVC      |
+| Zero deps      | ✓ Yes                 |
+| Header-only    | ✓ Yes                 |
+| Magic level    | ████████████ 100%   |
++----------------+-----------------------+
+
+╔═══════════════════════════════════════════════════════════════╗
+║          AUTHOR: Denys - [your contacts]                                  ║    
+║          LICENSE: WTFPL (Do What The Fuck You Want)                       ║
+╚═══════════════════════════════════════════════════════════════╝
+
